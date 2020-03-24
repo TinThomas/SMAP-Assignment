@@ -24,12 +24,10 @@ public class Word {
         this.score = 5f;
     }
 
-    /*Room requires either an empty constructor, or one where the parameters match the
-    attributes*/
-    public Word(){
-        this.name = "";
-        this.pronunciation = "";
-        this.description = "";
+    public Word(String name, String pronunciation, String description){
+        this.name = name;
+        this.pronunciation = pronunciation;
+        this.description = description;
         this.notes = "";
         this.score = 5f;
     }
