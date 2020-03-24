@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Assignment1</string>
+
+    <string name="mainactivity_header">My words:</string>
+    <string name="score_title">Word rating:</string>
+    <string name="notes_title">Notes:</string>
+    <string name="no_notes">No notes yet</string>
+    <string name="description_title">Description:</string>
+    <string name="placeholder_text" translatable="false">Placeholder</string>
+    <string name="search_field">Search</string>
+
+
+    <!--Buttons -->
+    <string name="btn_exit_text">Exit</string>
+    <string name="btn_cancel_text">Cancel</string>
+    <string name="btn_edit_text">Edit</string>
+    <string name="btn_ok_text">Ok</string>
+    <string name="btn_delete_text">Delete</string>
+    <string name="btn_add_text">Add</string>
+
+</resources>

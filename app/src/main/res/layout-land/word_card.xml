@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/txtName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/imgAnimal"
+        android:layout_toRightOf="@+id/imgAnimal"
+        android:text="@string/placeholder_text"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txtDescription"
+        android:layout_width="262dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtPronunciation"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="13dp"
+        android:layout_marginRight="13dp"
+        android:layout_toStartOf="@+id/txtScore"
+        android:layout_toLeftOf="@+id/txtScore"
+        android:layout_toEndOf="@+id/imgAnimal"
+        android:layout_toRightOf="@+id/imgAnimal"
+        android:text="@string/placeholder_text" />
+
+    <ImageView
+        android:id="@+id/imgAnimal"
+        android:layout_width="78dp"
+        android:layout_height="66dp"
+        android:layout_alignTop="@+id/txtPronunciation"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="10dp"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <TextView
+        android:id="@+id/txtPronunciation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/txtName"
+        android:layout_toRightOf="@+id/txtName"
+        android:text="@string/placeholder_text"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/txtScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtPronunciation"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:text="5"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

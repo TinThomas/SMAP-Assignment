@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aflevering1</string>
+
+    <string name="mainactivity_header">Mine ord:</string>
+    <string name="score_title">Ord rating:</string>
+    <string name="notes_title">Noter:</string>
+    <string name="no_notes">Ingen noter endnu</string>
+    <string name="description_title">Beskrivelse:</string>
+
+    <!--Knapper-->
+    <string name="btn_exit_text">Afslut</string>
+    <string name="btn_cancel_text">Annuller</string>
+    <string name="btn_edit_text">Rediger</string>
+    <string name="btn_ok_text">Ok</string>
+    <string name="btn_delete_text">Slet</string>
+    <string name="btn_add_text">Tilføj</string>
+    <string name="search_field">Søg</string>
+
+</resources>
