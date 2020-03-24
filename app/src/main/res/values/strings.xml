@@ -8,6 +8,7 @@
     <string name="description_title">Description:</string>
     <string name="placeholder_text" translatable="false">Placeholder</string>
     <string name="search_field">Search</string>
+    <string name="word">Word</string>
 
 
     <!--Buttons -->

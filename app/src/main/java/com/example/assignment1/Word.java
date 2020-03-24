@@ -1,8 +1,15 @@
 package com.example.assignment1;
 
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+
+@Entity
 public class Word {
+    @PrimaryKey
+    @NonNull
     private String name;
     private String pronunciation;
     private String description;
@@ -13,6 +20,16 @@ public class Word {
         this.name = arg[0];
         this.pronunciation = arg[1];
         this.description = arg[2];
+        this.notes = "";
+        this.score = 5f;
+    }
+
+    /*Room requires either an empty constructor, or one where the parameters match the
+    attributes*/
+    public Word(){
+        this.name = "";
+        this.pronunciation = "";
+        this.description = "";
         this.notes = "";
         this.score = 5f;
     }

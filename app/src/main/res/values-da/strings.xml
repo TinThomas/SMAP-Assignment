@@ -16,5 +16,6 @@
     <string name="btn_delete_text">Slet</string>
     <string name="btn_add_text">Tilføj</string>
     <string name="search_field">Søg</string>
+    <string name="word">Ord</string>
 
 </resources>

@@ -2,10 +2,14 @@ package com.example.assignment1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -20,6 +24,11 @@ public class ListActivity extends AppCompatActivity {
     private ArrayList<Word> wordList;
 
     final private int REQUEST_VIEW = 100;
+
+    private ServiceConnection wordServiceConnection;
+    private WordService wordService;
+
+    private String LOG = "MAIN";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +85,28 @@ public class ListActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //Starting the background service
+        setupConnectionToBindingService();
+
+        bindService(new Intent(ListActivity.this, WordService.class),
+                wordServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    private void setupConnectionToBindingService(){
+        wordServiceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                wordService = ((WordService.WordServiceBinder)service).getService();
+                Log.d(LOG, "Word service bound");
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                wordService = null;
+                Log.d(LOG,"Word service unbound");
+            }
+        };
     }
 
     //Intent extras for returning from editActivity
