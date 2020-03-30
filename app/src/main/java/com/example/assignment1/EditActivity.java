@@ -27,6 +27,11 @@ public class EditActivity extends AppCompatActivity {
 
     private String wordName;
 
+    TextView nameView;
+    TextView scoreView;
+    TextView notesView;
+    SeekBar scoreSeek;
+
     //Names of the intent extras
     public static final String NAME_EXTRA = "name_extra";
 
@@ -35,14 +40,35 @@ public class EditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
 
+        /*
+        Set all initial values before calling bindService, to prevent race condition
+         */
+
+        nameView = findViewById(R.id.txtName);
+        scoreView = findViewById(R.id.txtScore);
+        notesView = findViewById(R.id.txtNotes);
+        scoreSeek = findViewById(R.id.skbScore);
+
+        Intent intent = getIntent();
+        wordName = intent.getStringExtra(NAME_EXTRA);
+
+        nameView.setText(wordName);
+        scoreView.setText(Float.toString(score));
+
+        note = getString(R.string.no_notes);
+        notesView.setText(note);
+
+        //The score are floats, but the seekbar only takes int
+        int scoreInt = Math.round(score*10);
+        scoreSeek.setProgress(scoreInt);
+
+        //-------------------------------------------------------------------------
+
         setupConnectionToBindingService();
 
         bindService(new Intent(EditActivity.this, WordService.class),
                 wordServiceConnection, Context.BIND_AUTO_CREATE);
 
-        Intent intent = getIntent();
-
-        wordName = intent.getStringExtra(NAME_EXTRA);
 
         Button btnCancel = findViewById(R.id.btnCancel);
 
@@ -56,40 +82,6 @@ public class EditActivity extends AppCompatActivity {
             }
         });
 
-
-        TextView nameView = findViewById(R.id.txtName);
-        final TextView scoreView = findViewById(R.id.txtScore);
-        final TextView notesView = findViewById(R.id.txtNotes);
-
-        nameView.setText(wordName);
-        scoreView.setText(Float.toString(score));
-
-        note = getString(R.string.no_notes);
-        notesView.setText(note);
-
-        SeekBar scoreSeek = findViewById(R.id.skbScore);
-
-        //The score are floats, but the seekbar only takes int
-        int scoreInt = Math.round(score*10);
-        scoreSeek.setProgress(scoreInt);
-
-        scoreSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                score = (float) progress/10;
-                scoreView.setText(Float.toString(score));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                //Do nothing
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                //Do nothing
-            }
-        });
 
         Button btnOk = findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +115,30 @@ public class EditActivity extends AppCompatActivity {
                 score = word.getScore();
                 note = word.getNotes();
 
+
+                //Update views with the real values
+                notesView.setText(note);
+                scoreView.setText(Float.toString(score));
+                int scoreInt = Math.round(score*10);
+                scoreSeek.setProgress(scoreInt);
+
+                scoreSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        score = (float) progress/10;
+                        scoreView.setText(Float.toString(score));
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                        //Do nothing
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        //Do nothing
+                    }
+                });
             }
 
             @Override
