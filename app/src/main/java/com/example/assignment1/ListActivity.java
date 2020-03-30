@@ -44,8 +44,7 @@ public class ListActivity extends AppCompatActivity {
     SharedPreferences sharedPref;
     SharedPreferences.Editor prefEdit;
 
-    final private String CHANNEL_ID = "wordServiceChannel";
-    final private int NOTIFICATION_ID = 1;
+
 
     private String LOG = "MAIN";
 
@@ -64,22 +63,7 @@ public class ListActivity extends AppCompatActivity {
         bindService(new Intent(this, WordService.class),
                 wordServiceConnection, Context.BIND_AUTO_CREATE);
 
-//        Intent notificationIntent = new Intent(this, WordService.class);
-//        PendingIntent pendingIntent =
-//                PendingIntent.getActivity(this, 0, notificationIntent, 0);
-//
-//        createNotificationChannel();
-//
-//        Notification notification =
-//                new Notification.Builder(this, CHANNEL_ID)
-//                        .setContentTitle(getText(R.string.notification_title))
-//                        .setContentText(getText(R.string.placeholder_text))
-//                        .setSmallIcon(R.drawable.lion)
-//                        .setContentIntent(pendingIntent)
-//                        .setTicker(getText(R.string.placeholder_text))
-//                        .build();
-//
-//        WordService.startForeground(NOTIFICATION_ID, notification);
+
 
         wordList = new ArrayList<>();
 
@@ -183,21 +167,7 @@ public class ListActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    /*This method from
-    https://developer.android.com/training/notify-user/build-notification
-    on 26/03-2020*/
-    private void createNotificationChannel(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            CharSequence name = getString(R.string.channel_name);
-            String description = getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-            //Register notification with system
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
+
 
     //Whenever a local broadcast is received, update the wordList with new data
     private BroadcastReceiver onDatabaseUpdate = new BroadcastReceiver() {
