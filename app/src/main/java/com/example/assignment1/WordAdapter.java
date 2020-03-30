@@ -10,13 +10,14 @@ import android.widget.TextView;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class WordAdapter extends BaseAdapter {
     private Context context;
-    private ArrayList<Word> words;
+    private List<Word> words;
     private Word word;
 
-    public WordAdapter(Context c, ArrayList<Word> wordList){
+    public WordAdapter(Context c, List<Word> wordList){
         this.context = c;
         this.words = wordList;
     }

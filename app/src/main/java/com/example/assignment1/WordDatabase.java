@@ -1,5 +1,6 @@
 package com.example.assignment1;
 
+
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
@@ -7,4 +8,5 @@ import androidx.room.RoomDatabase;
 public abstract class WordDatabase extends RoomDatabase {
 
     public abstract WordDao wordDao();
+
 }

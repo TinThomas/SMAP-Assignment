@@ -2,9 +2,14 @@ package com.example.assignment1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,13 +19,15 @@ public class DetailsActivity extends AppCompatActivity {
 
     final int REQUEST_EDIT = 100;
 
+    private String wordName;
+
+    final static String LOG = "DetailsActivity";
+
+    private ServiceConnection wordServiceConnection;
+    private WordService wordService;
+
     //Names of the intent extras
     public static final String NAME_EXTRA = "name_extra";
-    public static final String PRONUNCIATION_EXTRA = "pronunciation_extra";
-    public static final String DESCRIPTION_EXTRA = "description_extra";
-    public static final String SCORE_EXTRA = "score_extra";
-    public static final String NOTES_EXTRA = "notes_extra";
-    public static final String POSITION_EXTRA = "position_extra";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,38 +35,17 @@ public class DetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_details);
 
 
-        //-------------------------------------------------------------------------
-        //Set the contents of the page
-        //-------------------------------------------------------------------------
+        setupConnectionToBindingService();
+        bindService(new Intent(DetailsActivity.this, WordService.class),
+                wordServiceConnection, Context.BIND_AUTO_CREATE);
 
         Intent intent = getIntent();
 
-        final String name = intent.getStringExtra(NAME_EXTRA);
-        final String pronunciation = intent.getStringExtra(PRONUNCIATION_EXTRA);
-        final String description = intent.getStringExtra(DESCRIPTION_EXTRA);
-        final String notes = intent.getStringExtra(NOTES_EXTRA);
-        final float score = intent.getFloatExtra(SCORE_EXTRA, 5);
-
-        final int position = intent.getIntExtra(POSITION_EXTRA, 1);
+        wordName = intent.getStringExtra(NAME_EXTRA);
 
         TextView nameView = findViewById(R.id.txtName);
-        nameView.setText(name);
+        nameView.setText(wordName);
 
-        TextView pronunciationView = findViewById(R.id.txtPronunciation);
-        pronunciationView.setText(pronunciation);
-
-        TextView descriptionView = findViewById(R.id.txtDescription);
-        descriptionView.setText(description);
-
-        TextView notesView = findViewById(R.id.txtNotes);
-        notesView.setText(notes);
-
-        TextView scoreView = findViewById(R.id.txtScore);
-        scoreView.setText(Float.toString(score));
-
-        ImageView image = findViewById(R.id.imgAnimal);
-        int imageId = ImageResourceFinder.FindImageResource(name);
-        image.setImageResource(imageId);
 
         //-------------------------------------------------------------------------
         //Set the buttons
@@ -82,11 +68,7 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DetailsActivity.this, EditActivity.class);
-                intent.putExtra(EditActivity.NAME_EXTRA, name);
-                intent.putExtra(EditActivity.SCORE_EXTRA, score);
-                intent.putExtra(EditActivity.NOTES_EXTRA, notes);
-                //Keep sending the position along for when we return to the main activity
-                intent.putExtra(EditActivity.POSITION_EXTRA, position);
+                intent.putExtra(EditActivity.NAME_EXTRA, wordName);
                 startActivityForResult(intent, REQUEST_EDIT);
             }
         });
@@ -109,5 +91,35 @@ public class DetailsActivity extends AppCompatActivity {
             default:
                 break;
         }
+    }
+
+    private void setupConnectionToBindingService(){
+        wordServiceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                wordService = ((WordService.WordServiceBinder)service).getService();
+                Log.d(LOG, "Word service bound");
+
+                //Based on name of word, find it in database
+                Word word = wordService.GetWord(wordName);
+
+                //Use the word to fill out information
+                TextView pronunciationView = findViewById(R.id.txtPronunciation);
+                pronunciationView.setText(word.getPronunciation());
+                TextView descriptionView = findViewById(R.id.txtDescription);
+                descriptionView.setText(word.getDescription());
+                TextView notesView = findViewById(R.id.txtNotes);
+                notesView.setText(word.getNotes());
+                TextView scoreView = findViewById(R.id.txtScore);
+                scoreView.setText(Float.toString(word.getScore()));
+
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                wordService = null;
+                Log.d(LOG,"Word service unbound");
+            }
+        };
     }
 }

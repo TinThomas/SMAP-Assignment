@@ -9,6 +9,9 @@
     <string name="placeholder_text" translatable="false">Placeholder</string>
     <string name="search_field">Search</string>
     <string name="word">Word</string>
+    <string name="notification_text">Wordlearner running</string>
+    <string name="channel_name" translatable="false">Foreground service channel</string>
+    <string name="channel_description" translatable="false">Channel for notification about WordService</string>
 
 
     <!--Buttons -->
@@ -18,5 +21,6 @@
     <string name="btn_ok_text">Ok</string>
     <string name="btn_delete_text">Delete</string>
     <string name="btn_add_text">Add</string>
+    <string name="notification_title" translatable="false">Wordlearner</string>
 
 </resources>
