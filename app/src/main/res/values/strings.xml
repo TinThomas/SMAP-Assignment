@@ -13,6 +13,9 @@
     <string name="channel_name" translatable="false">Foreground service channel</string>
     <string name="channel_description" translatable="false">Channel for notification about WordService</string>
 
+    <string name="foreground_notification_text">Wordlearner is running</string>
+    <string name="foreground_notification_title" translatable="false">Wordlearner</string>
+
 
     <!--Buttons -->
     <string name="btn_exit_text">Exit</string>
@@ -21,6 +24,6 @@
     <string name="btn_ok_text">Ok</string>
     <string name="btn_delete_text">Delete</string>
     <string name="btn_add_text">Add</string>
-    <string name="notification_title" translatable="false">Wordlearner</string>
+    <string name="notification_title">Wordlearner</string>
 
 </resources>

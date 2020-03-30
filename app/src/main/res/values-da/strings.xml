@@ -18,5 +18,7 @@
     <string name="search_field">Søg</string>
     <string name="word">Ord</string>
     <string name="notification_text">Wordlearner kører</string>
+    <string name="foreground_notification_text">Wordlearner kører</string>
+    <string name="notification_title">Wordlearner</string>
 
 </resources>

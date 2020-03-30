@@ -7,6 +7,8 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
@@ -20,8 +22,11 @@ import androidx.room.Room;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import static android.app.Notification.PRIORITY_LOW;
 
 public class WordService extends Service {
 
@@ -73,11 +78,11 @@ public class WordService extends Service {
 
         Notification notification =
                 new Notification.Builder(this, CHANNEL_ID)
-                        .setContentTitle(getText(R.string.notification_title))
-                        .setContentText(getText(R.string.placeholder_text))
-                        .setSmallIcon(R.drawable.lion)
+                        .setContentTitle(getText(R.string.foreground_notification_title))
+                        .setContentText(getText(R.string.foreground_notification_text))
+                        .setSmallIcon(R.mipmap.ic_launcher_round)
                         .setContentIntent(pendingIntent)
-                        .setTicker(getText(R.string.placeholder_text))
+                        .setPriority(PRIORITY_LOW)
                         .build();
 
         startForeground(NOTIFICATION_ID, notification);
@@ -139,9 +144,7 @@ public class WordService extends Service {
         @Override
         protected Void doInBackground(Word... words) {
             db.wordDao().insertAll(words);
-//            wordList = db.wordDao().getAll();
-            for(Word var : words)
-                wordList.add(var);
+            wordList.addAll(Arrays.asList(words));
             return null;
         }
 
