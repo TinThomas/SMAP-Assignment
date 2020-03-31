@@ -169,21 +169,6 @@ public class WordService extends Service {
         }
     }
 
-//    private class GetAllWordsTask extends AsyncTask<Void, Void, Void>{
-//
-//        @Override
-//        protected Void doInBackground(Void... voids) {
-//            //getAll returns a List, which is used to populate a new ArrayList,
-//            //which can then be returned
-//            wordList = new ArrayList<>(db.wordDao().getAll());
-//            return null;
-//        }
-//        @Override
-//        protected void onPostExecute(Void result){
-//            broadcastDatabaseGot();
-//        }
-//    }
-
     private class GetWordTask extends AsyncTask<String, Void, Word>{
 
         @Override
@@ -197,8 +182,6 @@ public class WordService extends Service {
     }
 
     private class InitializeListTask extends AsyncTask<Void, Void, Void>{
-
-
         @Override
         protected Void doInBackground(Void... voids) {
             wordList = (ArrayList<Word>) db.wordDao().getAll();
@@ -217,15 +200,6 @@ public class WordService extends Service {
         Intent broadcastIntent = new Intent();
         broadcastIntent.setAction(BROADCAST_DATABASE_UPDATE);
         Log.d(LOG,"Sending database update broadcast");
-        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
-    }
-
-    //The broadcast for saying that the database has been "gotten"
-    public static final String BROADCAST_DATABASE_GOT = "DatabaseGotBroadcast";
-    private void broadcastDatabaseGot(){
-        Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction(BROADCAST_DATABASE_GOT);
-        Log.d(LOG,"Sending database got broadcast");
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
     }
 

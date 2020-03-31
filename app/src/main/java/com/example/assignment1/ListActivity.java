@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -40,7 +41,7 @@ public class ListActivity extends AppCompatActivity {
 
     final String PREFS_NAME = "SharedPrefs";
     final String FIRST_LAUNCH = "firstLaunch";
-    private boolean first_launch = true;
+
     SharedPreferences sharedPref;
     SharedPreferences.Editor prefEdit;
 
@@ -64,7 +65,6 @@ public class ListActivity extends AppCompatActivity {
                 wordServiceConnection, Context.BIND_AUTO_CREATE);
 
 
-
         wordList = new ArrayList<>();
 
         wordAdapter = new WordAdapter(ListActivity.this, wordList);
@@ -85,7 +85,6 @@ public class ListActivity extends AppCompatActivity {
             }
         });
 
-
         Button btnExit = findViewById(R.id.btnExitMain);
         btnExit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,7 +97,6 @@ public class ListActivity extends AppCompatActivity {
         prefEdit = sharedPref.edit();
 
         Log.d(LOG, "onCreate complete");
-
     }
 
     @Override
@@ -110,13 +108,6 @@ public class ListActivity extends AppCompatActivity {
         updateFilter.addAction(WordService.BROADCAST_DATABASE_UPDATE);
         LocalBroadcastManager.getInstance(this).registerReceiver(onDatabaseUpdate, updateFilter);
 
-        IntentFilter gotFilter = new IntentFilter();
-        gotFilter.addAction(WordService.BROADCAST_DATABASE_GOT);
-        LocalBroadcastManager.getInstance(this).registerReceiver(onDatabaseGot, gotFilter);
-
-//        IntentFilter getWordsFilter = new IntentFilter();
-//        getWordsFilter.addAction(WordService.BROADCAST_DATABASE_GOT);
-//        LocalBroadcastManager.getInstance(this).registerReceiver(onDatabaseGot, getWordsFilter);
     }
 
     private void setupConnectionToBindingService(){
@@ -126,6 +117,7 @@ public class ListActivity extends AppCompatActivity {
                 wordService = ((WordService.WordServiceBinder)service).getService();
                 Log.d(LOG, "Word service bound");
 
+                //If this is the first launch
                 if(sharedPref.getBoolean(FIRST_LAUNCH, true)){
                     wordService.SeedDatabase();
                     prefEdit.putBoolean(FIRST_LAUNCH, false);
@@ -177,20 +169,6 @@ public class ListActivity extends AppCompatActivity {
 
             updateWordList();
             wordAdapter.notifyDataSetChanged();
-
-        }
-    };
-    //Whenever a the wordlist has been updated, notify the view that data has changed
-    private BroadcastReceiver onDatabaseGot = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.d(LOG, "Received database got broadcast");
-            ArrayList<Word> temp = wordService.GetAllWords();
-            for(Word var:temp){
-                wordList.add(var);
-            }
-
-            wordAdapter.notifyDataSetChanged();
         }
     };
 
@@ -202,6 +180,5 @@ public class ListActivity extends AppCompatActivity {
             wordList.add(var);
         }
         wordAdapter.notifyDataSetChanged();
-
     }
 }
