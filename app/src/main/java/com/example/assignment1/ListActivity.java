@@ -21,9 +21,11 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +48,6 @@ public class ListActivity extends AppCompatActivity {
     SharedPreferences.Editor prefEdit;
 
 
-
     private String LOG = "MAIN";
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -55,6 +56,8 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
+        sharedPref = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        prefEdit = sharedPref.edit();
 
         //Starting the background service
         setupConnectionToBindingService();
@@ -93,8 +96,24 @@ public class ListActivity extends AppCompatActivity {
             }
         });
 
-        sharedPref = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        prefEdit = sharedPref.edit();
+        Button btnAdd = findViewById(R.id.btnAdd);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //This method of closing the keyboard found on
+                //https://stackoverflow.com/questions/3400028/close-virtual-keyboard-on-button-press
+                //on 09/04-2020
+                InputMethodManager inputManager = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+
+
+                TextView searchView = findViewById(R.id.edtSearch);
+                String searchTerm = searchView.getText().toString().toLowerCase();
+                wordService.findWord(searchTerm);
+            }
+        });
 
         Log.d(LOG, "onCreate complete");
     }
@@ -118,9 +137,13 @@ public class ListActivity extends AppCompatActivity {
                 Log.d(LOG, "Word service bound");
 
                 //If this is the first launch
+                /*
+                For some reason this method is called twice on first launch, and I
+                can't quite figure out why, so often the database will be seeded twice
+                 */
                 if(sharedPref.getBoolean(FIRST_LAUNCH, true)){
-                    wordService.SeedDatabase();
                     prefEdit.putBoolean(FIRST_LAUNCH, false);
+                    wordService.SeedDatabase();
                 }
 
                 //This makes the wordservice update the (initially empty) list of words
@@ -176,9 +199,10 @@ public class ListActivity extends AppCompatActivity {
         //This seems like a dumb way to do it, but nothing else works
         ArrayList<Word> temp = wordService.GetAllWords();
         wordList.clear();
-        for(Word var:temp){
-            wordList.add(var);
-        }
+        wordList.addAll(temp);
+//        for(Word var:temp){
+//            wordList.add(var);
+//        }
         wordAdapter.notifyDataSetChanged();
     }
 }

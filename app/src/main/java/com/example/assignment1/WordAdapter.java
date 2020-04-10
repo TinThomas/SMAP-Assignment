@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,10 +71,16 @@ public class WordAdapter extends BaseAdapter {
             txtDescription.setText(word.getDescription());
             txtScore.setText(word.getScore().toString());
 
-            ImageView animalView = convertView.findViewById(R.id.imgAnimal);
+            ImageView imageView = convertView.findViewById(R.id.imgAnimal);
 
-            int imageId = ImageResourceFinder.FindImageResource(word.getName());
-            animalView.setImageResource(imageId);
+            //If the api doesn't have an image, it just returns the string "null"
+            //Use of Picasso based on tutorial at
+            //https://abhiandroid.com/programming/picasso#Callbacks_and_Targets_In_Picasso_In_Android
+            //on 09/04-2020
+            if(word.getImage_url().equals("null") || word.getImage_url() == null)
+                imageView.setImageResource(R.drawable.no_image);
+            else
+                Picasso.with(convertView.getContext()).load(word.getImage_url()).into(imageView);
         }
         return convertView;
     }

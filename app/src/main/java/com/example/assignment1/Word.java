@@ -15,6 +15,7 @@ public class Word {
     private String description;
     private String notes;
     private Float score;
+    private String image_url;
 
     public Word(String[] arg){
         this.name = arg[0];
@@ -71,5 +72,13 @@ public class Word {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 }

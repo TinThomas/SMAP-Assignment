@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -14,6 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 public class DetailsActivity extends AppCompatActivity {
 
@@ -29,10 +32,13 @@ public class DetailsActivity extends AppCompatActivity {
     //Names of the intent extras
     public static final String NAME_EXTRA = "name_extra";
 
+    private Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+        context = this;
 
 
         setupConnectionToBindingService();
@@ -53,6 +59,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         Button btnCancel = findViewById(R.id.btnCancel);
         Button btnEdit = findViewById(R.id.btnEdit);
+        Button btnDelete = findViewById(R.id.btnDelete);
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +77,16 @@ public class DetailsActivity extends AppCompatActivity {
                 Intent intent = new Intent(DetailsActivity.this, EditActivity.class);
                 intent.putExtra(EditActivity.NAME_EXTRA, wordName);
                 startActivityForResult(intent, REQUEST_EDIT);
+            }
+        });
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wordService.DeleteWord(wordName);
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
     }
@@ -112,6 +129,17 @@ public class DetailsActivity extends AppCompatActivity {
                 notesView.setText(word.getNotes());
                 TextView scoreView = findViewById(R.id.txtScore);
                 scoreView.setText(Float.toString(word.getScore()));
+
+                ImageView imageView = findViewById(R.id.imgAnimal);
+
+                //If the api doesn't have an image, it just returns the string "null"
+                //Use of Picasso based on tutorial at
+                //https://abhiandroid.com/programming/picasso#Callbacks_and_Targets_In_Picasso_In_Android
+                //on 09/04-2020
+                if(word.getImage_url().equals("null") || word.getImage_url() == null)
+                    imageView.setImageResource(R.drawable.no_image);
+                else
+                    Picasso.with(context).load(word.getImage_url()).into(imageView);
 
             }
 
